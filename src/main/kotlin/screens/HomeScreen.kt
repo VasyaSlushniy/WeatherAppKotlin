@@ -3,6 +3,7 @@ package screens
 import Cities
 import Gson.WeatherForecast
 import WeatherObj
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,8 +13,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.key.Key.Companion.R
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +31,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.net.URL
 
 
-private var city : String = "kyiv, ua"
 private var weatherForecast:WeatherForecast = WeatherForecast(null, null, null, null, null)
 private var day1 = MutableStateFlow("text")
 private var day2 = MutableStateFlow("text")
@@ -49,9 +52,9 @@ fun HomeScreen(
     day1.value = setText(0)
     day2.value = setText(8)
     day3.value = setText(16)
-    draw(day1)
-    draw(day2)
-    draw(day3)
+    draw(day1,0)
+    draw(day2,19)
+    draw(day3,14)
 }
 
 
@@ -70,10 +73,10 @@ fun init (){
 
 
 @Composable
-fun draw (day:MutableStateFlow<String>){
+fun draw (day:MutableStateFlow<String>, index:Int){
     val dayTx by day.collectAsState()
     Column(
-        modifier = Modifier.padding(start = (100+counter*210).dp,).width(200.dp)
+        modifier = Modifier.padding(start = (100+counter*210).dp, top = 25.dp).width(200.dp)
     ) {
 
         val shape = RectangleShape
@@ -86,6 +89,11 @@ fun draw (day:MutableStateFlow<String>){
                 .border(2.dp, MaterialTheme.colors.secondary, shape)
                 .background(MaterialTheme.colors.primary, shape)
                 .padding(16.dp)
+        )
+        Image(
+            painter = painterResource(resourcePath = "Icons/${weatherForecast.list?.get(index)?.weather?.get(0)?.icon}.png"),
+            contentDescription = "resources/Icons/01d.png",
+           // Modifier.paint(painterResource("Icons/04d.png")),
         )
         counter++
 //        Button(
@@ -130,7 +138,8 @@ fun setText (index: Int) : String{
             "pressure = ${weatherForecast.list?.get(index)?.main?.pressure} \n" +
             "clouds = ${weatherForecast.list?.get(index)?.clouds?.all}\n" +
             "Date = ${weatherForecast.list?.get(index)?.dtTxt}\n" +
-            "time = ${weatherForecast.list?.get(index)?.dt}"
+            "time = ${weatherForecast.list?.get(index)?.dt} \n " +
+            "icon = ${weatherForecast.list?.get(index)?.weather?.get(0)?.icon}"
 }
 
 
