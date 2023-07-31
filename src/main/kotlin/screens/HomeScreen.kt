@@ -42,9 +42,6 @@ private var counter = 0
 fun HomeScreen(
     navController: NavController
 ) {
-    val day1Tx by day1.collectAsState()
-    val day2Tx by day2.collectAsState()
-    val day3Tx by day3.collectAsState()
      getWeather("kyiv, ua")
     init()
     DropdownDemo()
@@ -52,25 +49,19 @@ fun HomeScreen(
     day1.value = setText(0)
     day2.value = setText(8)
     day3.value = setText(16)
-    counter=0
-    draw(day1Tx)
-    counter++
-    draw(day2Tx)
-    counter++
-    draw(day3Tx)
+    draw(day1)
+    draw(day2)
+    draw(day3)
 }
 
 
 fun init (){
     counter = 0
-    day1.value = setText(counter)
-    println(day1.value.toString())
+    day1.value = setText(1)
     counter++
-    day2.value = setText(counter)
-    println(day2.value.toString())
+    day2.value = setText(8)
     counter++
-    day3.value = setText(counter)
-    println(day3.value.toString())
+    day3.value = setText(16)
     counter = 0
 
 
@@ -79,13 +70,14 @@ fun init (){
 
 
 @Composable
-fun draw (day:String){
+fun draw (day:MutableStateFlow<String>){
+    val dayTx by day.collectAsState()
     Column(
         modifier = Modifier.padding(start = (100+counter*210).dp,).width(200.dp)
     ) {
 
         val shape = RectangleShape
-        Text(text ="text = $day",
+        Text(text ="text = ${dayTx}",
             style = TextStyle(
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -95,6 +87,7 @@ fun draw (day:String){
                 .background(MaterialTheme.colors.primary, shape)
                 .padding(16.dp)
         )
+        counter++
 //        Button(
 //            onClick = {
 //           //     navController.navigate(Screen.ProfileScreens.name)
@@ -105,13 +98,14 @@ fun draw (day:String){
 //        }
 
     }
+    println("Number = " + weatherForecast.list?.size)
 
     println(counter)
 }
 
 fun getWeather (CITY: String){
     val API = "29f7b967b48298af39b3b4e8c07242be"
-    var response:String?
+    val response:String?
 
     try{
        // response = URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API").
@@ -119,23 +113,24 @@ fun getWeather (CITY: String){
         readText(
             Charsets.UTF_8
         )
-        var gson = Gson()
+        val gson = Gson()
         weatherForecast = gson.fromJson(response,WeatherForecast::class.java)
 
     }catch (e: Exception){
-        response = null
+        println(e.printStackTrace())
     }
 }
 
-fun setText (counter: Int) : String{
-    var index = counter*8
-    return "temp = ${weatherForecast.list?.get(counter)?.main?.temp}\n" +
-            "wind speed = ${weatherForecast.list?.get(counter)?.wind?.speed}\n" +
-            "humidity = ${weatherForecast.list?.get(counter)?.main?.humidity} \n" +
-            "pressure = ${weatherForecast.list?.get(counter)?.main?.pressure} \n" +
-            "clouds = ${weatherForecast.list?.get(counter)?.clouds?.all}\n" +
-            "Date = ${weatherForecast.list?.get(counter)?.dtTxt}\n" +
-            "time = ${weatherForecast.list?.get(counter)?.dt}"
+
+fun setText (index: Int) : String{
+
+    return "temp = ${weatherForecast.list?.get(index)?.main?.temp}\n" +
+            "wind speed = ${weatherForecast.list?.get(index)?.wind?.speed}\n" +
+            "humidity = ${weatherForecast.list?.get(index)?.main?.humidity} \n" +
+            "pressure = ${weatherForecast.list?.get(index)?.main?.pressure} \n" +
+            "clouds = ${weatherForecast.list?.get(index)?.clouds?.all}\n" +
+            "Date = ${weatherForecast.list?.get(index)?.dtTxt}\n" +
+            "time = ${weatherForecast.list?.get(index)?.dt}"
 }
 
 
@@ -161,7 +156,7 @@ fun DropdownDemo() {
                 DropdownMenuItem(onClick = {
                     selectedIndex = index
                     getWeather("${items.get(index)}, ua")
-                     init()
+                        init()
                         expanded = false
                 }) {
                     val disabledText = if (s == disabledValue) {
