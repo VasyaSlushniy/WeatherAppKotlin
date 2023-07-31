@@ -1,30 +1,24 @@
 package screens
 
-import Cities
 import Gson.WeatherForecast
-import WeatherObj
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
-import navcontroller.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -32,70 +26,75 @@ import java.net.URL
 
 
 private var weatherForecast:WeatherForecast = WeatherForecast(null, null, null, null, null)
-private var day1 = MutableStateFlow("text")
-private var day2 = MutableStateFlow("text")
-private var day3 = MutableStateFlow("text")
-private var day4 = MutableStateFlow("")
-private var day5 = MutableStateFlow("")
-private var day6 = MutableStateFlow("")
+private var forecasts  = listOf(MutableStateFlow("0"),
+    MutableStateFlow("1"),
+    MutableStateFlow("2"),
+    MutableStateFlow("3"),
+    MutableStateFlow("4"),
+    MutableStateFlow("5"),
+    MutableStateFlow("6") ,
+    MutableStateFlow("7"),
+    MutableStateFlow("8"))
+
 private var counter = 0
+private var countline = 0
+private var counterDraw = 0
 
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    //navController: NavController
 ) {
      getWeather("kyiv, ua")
     init()
     DropdownDemo()
 
-    day1.value = setText(0)
-    day2.value = setText(8)
-    day3.value = setText(16)
-    draw(day1,0)
-    draw(day2,19)
-    draw(day3,14)
+    for (item in forecasts){
+        draw(item, counter)
+        counter++
+    }
+    counter = 0
+
+
+
 }
 
 
 fun init (){
     counter = 0
-    day1.value = setText(1)
-    counter++
-    day2.value = setText(8)
-    counter++
-    day3.value = setText(16)
+    for (item in forecasts){
+        item.value = setText(counter)
+        counter++
+    }
     counter = 0
 
-
-  //  val myText by day1.collectAsState()
 }
 
-
+@Preview
 @Composable
 fun draw (day:MutableStateFlow<String>, index:Int){
+
     val dayTx by day.collectAsState()
+    val shape = RoundedCornerShape(16.dp)
     Column(
-        modifier = Modifier.padding(start = (100+counter*210).dp, top = 25.dp).width(200.dp)
+        modifier = Modifier.padding(start = (100+ (counterDraw%3)*210).dp, top = (countline* 180 + 25).dp).width(200.dp).
+            border(2.dp, MaterialTheme.colors.secondary, shape)
+            .background(MaterialTheme.colors.primary, shape)
+            .padding(16.dp)
     ) {
 
-        val shape = RectangleShape
-        Text(text ="text = ${dayTx}",
+        Image(
+            painter = painterResource(resourcePath = "Icons/${weatherForecast.list?.get(index)?.weather?.get(0)?.icon}.png"),
+            contentDescription = "resources/Icons/01d.png",
+            Modifier.size(50.dp).align(Alignment.CenterHorizontally),
+        )
+        Text(text =dayTx,
             style = TextStyle(
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center),
-            modifier = Modifier.padding(16.dp)
-                .border(2.dp, MaterialTheme.colors.secondary, shape)
-                .background(MaterialTheme.colors.primary, shape)
-                .padding(16.dp)
+
         )
-        Image(
-            painter = painterResource(resourcePath = "Icons/${weatherForecast.list?.get(index)?.weather?.get(0)?.icon}.png"),
-            contentDescription = "resources/Icons/01d.png",
-           // Modifier.paint(painterResource("Icons/04d.png")),
-        )
-        counter++
 //        Button(
 //            onClick = {
 //           //     navController.navigate(Screen.ProfileScreens.name)
@@ -106,9 +105,11 @@ fun draw (day:MutableStateFlow<String>, index:Int){
 //        }
 
     }
-    println("Number = " + weatherForecast.list?.size)
-
-    println(counter)
+    counterDraw++
+    if (counterDraw%3==0) countline++
+    if (counterDraw==9) {
+        counterDraw= 0
+    countline = 0}
 }
 
 fun getWeather (CITY: String){
@@ -132,14 +133,12 @@ fun getWeather (CITY: String){
 
 fun setText (index: Int) : String{
 
-    return "temp = ${weatherForecast.list?.get(index)?.main?.temp}\n" +
-            "wind speed = ${weatherForecast.list?.get(index)?.wind?.speed}\n" +
-            "humidity = ${weatherForecast.list?.get(index)?.main?.humidity} \n" +
-            "pressure = ${weatherForecast.list?.get(index)?.main?.pressure} \n" +
-            "clouds = ${weatherForecast.list?.get(index)?.clouds?.all}\n" +
-            "Date = ${weatherForecast.list?.get(index)?.dtTxt}\n" +
-            "time = ${weatherForecast.list?.get(index)?.dt} \n " +
-            "icon = ${weatherForecast.list?.get(index)?.weather?.get(0)?.icon}"
+    return "Температура: ${weatherForecast.list?.get(index)?.main?.temp}\n" +
+            "Швидкість вітру: ${weatherForecast.list?.get(index)?.wind?.speed}\n" +
+            "Вологість = ${weatherForecast.list?.get(index)?.main?.humidity} \n" +
+            "Тиск = ${weatherForecast.list?.get(index)?.main?.pressure} \n" +
+            "${weatherForecast.list?.get(index)?.dtTxt}\n"
+           // "${weatherForecast.list?.get(index)?.dt} \n "
 }
 
 

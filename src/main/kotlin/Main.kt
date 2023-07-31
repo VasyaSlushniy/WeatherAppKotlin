@@ -101,16 +101,16 @@ enum class Screen(
         label = "Home",
         icon = Icons.Filled.Home
     ),
-    NotificationsScreen(
-        label = "Notifications",
+    ThreeDaysScreen(
+        label = "Three days",
         icon = Icons.Filled.Notifications
     ),
-    SettingsScreen(
-        label = "Settings",
+    FiveDaysScreen(
+        label = "Five days",
         icon = Icons.Filled.Settings
     ),
     ProfileScreens(
-        label = "User Profile",
+        label = "Profile",
         icon = Icons.Filled.AccountBox
     )
 }
@@ -122,14 +122,14 @@ fun CustomNavigationHost(
 ) {
     NavigationHost(navController) {
         composable(Screen.HomeScreen.name) {
-            HomeScreen(navController)
+            HomeScreen()
         }
 
-        composable(Screen.NotificationsScreen.name) {
+        composable(Screen.ThreeDaysScreen.name) {
             NotificationScreen(navController)
         }
 
-        composable(Screen.SettingsScreen.name) {
+        composable(Screen.FiveDaysScreen.name) {
             SettingScreen(navController)
         }
 
