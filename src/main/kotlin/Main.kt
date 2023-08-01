@@ -1,4 +1,5 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+import Gson.WeatherForecast
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -25,13 +26,11 @@ import navcontroller.NavController
 import navcontroller.NavigationHost
 import navcontroller.composable
 import navcontroller.rememberNavController
-import screens.HomeScreen
-import screens.NotificationScreen
-import screens.ProfileScreen
-import screens.SettingScreen
+import screens.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+public var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
 @Composable
 @Preview
 fun App() {
@@ -83,6 +82,7 @@ fun App() {
 }
 
 fun main() = application {
+    weatherForecast = getWeather("kyiv, ua")
     Window(onCloseRequest = ::exitApplication) {
         App()
 
@@ -126,11 +126,11 @@ fun CustomNavigationHost(
         }
 
         composable(Screen.ThreeDaysScreen.name) {
-            NotificationScreen(navController)
+            ThreeDaysScreen(navController)
         }
 
         composable(Screen.FiveDaysScreen.name) {
-            SettingScreen(navController)
+            FiveDaysScreen(navController)
         }
 
         composable(Screen.ProfileScreens.name) {

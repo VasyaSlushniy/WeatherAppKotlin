@@ -1,23 +1,32 @@
 package screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
+
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+
+import init
+import kotlinx.coroutines.flow.MutableStateFlow
+import methods.draw
 import navcontroller.NavController
 
+private var forecasts  = listOf(
+    MutableStateFlow("0"),
+    MutableStateFlow("1"),
+    MutableStateFlow("2"),
+    MutableStateFlow("3"),
+    MutableStateFlow("4"),
+)
+private var counter = 0
+private var list = mutableListOf(0,0)
+
 @Composable
-fun SettingScreen(
+fun FiveDaysScreen(
     navController: NavController
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(navController.currentScreen.value)
+    init(forecasts, 8)
+
+    for (item in forecasts){
+        draw(item, counter, 5, list)
+        counter++
     }
+    counter = 0
 }
