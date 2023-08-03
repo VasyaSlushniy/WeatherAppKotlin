@@ -45,7 +45,8 @@ fun draw (day: MutableStateFlow<String>, index:Int, numberOfItems: Int, list: Mu
         border(2.dp, MaterialTheme.colors.secondary, shape)
             .background(MaterialTheme.colors.primary, shape)
             .padding(16.dp)
-            .clickable {navigateToDetails(index, navController)}
+            .clickable {navigateToDetails(index, navController)
+            },
     ) {
 
         Image(

@@ -19,6 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import navcontroller.NavController
 import navcontroller.NavigationHost
 import navcontroller.composable
@@ -28,9 +32,12 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.concurrent.thread
+import kotlin.system.measureTimeMillis
 
 public var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
 
+private var city = "kyiv, ua"
 @Composable
 @Preview
 fun App() {
@@ -79,9 +86,22 @@ fun App() {
             }
         }
     }
+    thread {
+        var c = 0
+        while (true) {
+
+        Thread.sleep(60000)
+        getWeather(getCity()+", ua")
+        updateWeatherHome()
+        updateWeatherFive()
+        updateWeatherThree()
+            c++
+            println("time $c")
+    } }
 }
 
 fun main() = application {
+
     val state = rememberWindowState(
         placement = WindowPlacement.Floating,
         position = WindowPosition(Alignment.Center),
@@ -89,12 +109,16 @@ fun main() = application {
         width = 800.dp,
         height = 600.dp
     )
-    weatherForecast = getWeather("kyiv, ua")
+
+    weatherForecast = getWeather(getCity()+", ua")
     Window(onCloseRequest = ::exitApplication, visible = true, state = state) {
         App()
 
     }
+
 }
+
+
 
 
 enum class Screen(
@@ -152,6 +176,14 @@ fun CustomNavigationHost(
 
 
 
+}
+
+fun getCity ():String {
+    return city
+}
+
+fun setCity (newCity:String){
+    city = newCity
 }
 
 

@@ -21,11 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.gson.Gson
+import getCity
 import getWeather
 import init
 import kotlinx.coroutines.flow.MutableStateFlow
 import methods.draw
 import navcontroller.NavController
+import weatherForecast
 import java.net.URL
 
 
@@ -33,8 +35,6 @@ private var forecasts  = listOf(
     MutableStateFlow("0"),
     MutableStateFlow("1"),
     MutableStateFlow("2"),
-    MutableStateFlow("3"),
-    MutableStateFlow("4"),
 )
 private var counter = 0
 private var list = mutableListOf(0,0)
@@ -45,12 +45,29 @@ fun ThreeDaysScreen(
 ) {
     init(forecasts, 8, 0)
 
+    counter = 0
     for (item in forecasts){
         draw(item, counter, 3,list, navController)
         counter+=8
     }
     counter = 0
+
+
 }
+
+fun updateWeatherThree () {
+    weatherForecast = getWeather(getCity()+", ua")
+    var count = 0
+    for (item in forecasts){
+        item.value = "Температура: ${weatherForecast.list?.get(count)?.main?.temp}\n" +
+                "Швидкість вітру: ${weatherForecast.list?.get(count)?.wind?.speed}\n" +
+                "Вологість = ${weatherForecast.list?.get(count)?.main?.humidity} \n" +
+                "Тиск = ${weatherForecast.list?.get(count)?.main?.pressure} \n" +
+                "${weatherForecast.list?.get(count)?.dtTxt}\n"
+        count += 8
+    }
+}
+
 
 
 

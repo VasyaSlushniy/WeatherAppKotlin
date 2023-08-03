@@ -5,9 +5,7 @@ import methods.draw
 import navcontroller.NavController
 import java.time.LocalDate
 
-
-
-private var date :String? = ""
+private var detailDate :String? = ""
 private var counter = 0
 private var list = mutableListOf(0,0)
 private var forecasts  = listOf(
@@ -17,7 +15,7 @@ private var forecasts  = listOf(
    MutableStateFlow("3"),
    MutableStateFlow("4"),
    MutableStateFlow("5"),
-   MutableStateFlow("6") ,
+   MutableStateFlow("6"),
    MutableStateFlow("7"),
    MutableStateFlow("8")
 )
@@ -29,17 +27,15 @@ navController: NavController, date: LocalDate
    var run = true
    var index = 0
    var bool : Boolean?
+   if (detailDate== null || detailDate.equals("")) setDay(LocalDate.now().toString())
    while (run){
-      println(date)
-      println(weatherForecast.list?.get(index)?.dtTxt?.substringBefore(" "))
       bool = weatherForecast.list?.get(index)?.dtTxt?.substringBefore(" ")?.equals(getDay())
-      println("$index")
+
       if (bool!!){
          run = false
       } else index++
    }
 
-   println(index)
    init(forecasts,1, index)
 
 
@@ -52,13 +48,11 @@ counter = index
 
 }
 
-
-
-
 fun setDay (dateTx :String?){
-   date = dateTx
+
+   detailDate = dateTx
 }
 
 fun getDay():String? {
-   return date
+   return detailDate
 }
