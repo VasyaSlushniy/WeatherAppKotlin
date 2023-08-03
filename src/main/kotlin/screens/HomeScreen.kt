@@ -7,6 +7,7 @@ import init
 import kotlinx.coroutines.flow.MutableStateFlow
 import methods.DropDown
 import methods.draw
+import navcontroller.NavController
 
 
 private var weatherForecast:WeatherForecast = WeatherForecast(null, null, null, null, null)
@@ -25,14 +26,14 @@ private var list = mutableListOf(0,0)
 
 @Composable
 fun HomeScreen(
-    //navController: NavController
+    navController: NavController
 ) {
      weatherForecast = getWeather("kyiv, ua")
-    init(forecasts,1)
+    init(forecasts,1, 0)
 
 
     for (item in forecasts){
-        draw(item, counter, 9 , list)
+        draw(item, counter, 9 , list, navController)
         counter++
     }
     counter = 0

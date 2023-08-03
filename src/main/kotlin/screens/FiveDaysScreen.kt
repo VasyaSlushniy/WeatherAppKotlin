@@ -1,6 +1,9 @@
 package screens
 
 
+import WeatherDetails
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 import init
@@ -22,11 +25,12 @@ private var list = mutableListOf(0,0)
 fun FiveDaysScreen(
     navController: NavController
 ) {
-    init(forecasts, 8)
+    init(forecasts, 8, 0)
 
     for (item in forecasts){
-        draw(item, counter, 5, list)
-        counter++
+        draw(item, counter, 5, list, navController)
+        counter+=8
     }
     counter = 0
+
 }

@@ -44,7 +44,7 @@ fun DropDown(forecasts:List<MutableStateFlow<String>>, step: Int) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {
                     weatherForecast = getWeather("${items[index]}, ua")
-                    init(forecasts, step)
+                    init(forecasts, step, 0)
                 }) {
                     val disabledText = if (s == disabledValue) {
                         " (Disabled)"

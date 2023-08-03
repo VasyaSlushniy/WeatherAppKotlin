@@ -6,10 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,17 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.*
 import navcontroller.NavController
 import navcontroller.NavigationHost
 import navcontroller.composable
 import navcontroller.rememberNavController
 import screens.*
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 public var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
+
 @Composable
 @Preview
 fun App() {
@@ -82,17 +82,21 @@ fun App() {
 }
 
 fun main() = application {
+    val state = rememberWindowState(
+        placement = WindowPlacement.Floating,
+        position = WindowPosition(Alignment.Center),
+        isMinimized = false,
+        width = 800.dp,
+        height = 600.dp
+    )
     weatherForecast = getWeather("kyiv, ua")
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, visible = true, state = state) {
         App()
 
     }
 }
 
 
-/**
- * Screens
- */
 enum class Screen(
     val label: String,
     val icon: ImageVector
@@ -112,6 +116,10 @@ enum class Screen(
     ProfileScreens(
         label = "Profile",
         icon = Icons.Filled.AccountBox
+    ),
+    WeatherDetails(
+        label = "Детальніше",
+        icon = Icons.Filled.Info
     )
 }
 
@@ -122,7 +130,7 @@ fun CustomNavigationHost(
 ) {
     NavigationHost(navController) {
         composable(Screen.HomeScreen.name) {
-            HomeScreen()
+            HomeScreen(navController)
         }
 
         composable(Screen.ThreeDaysScreen.name) {
@@ -136,10 +144,14 @@ fun CustomNavigationHost(
         composable(Screen.ProfileScreens.name) {
             ProfileScreen(navController)
         }
+        composable(Screen.WeatherDetails.name){
+            WeatherDetails(navController, LocalDate.now())
+        }
 
     }.build()
 
 
 
 }
+
 
