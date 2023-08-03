@@ -2,11 +2,10 @@ package methods
 
 import Gson.WeatherForecast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
@@ -24,22 +23,24 @@ import setCity
 import weatherForecast
 
 @Composable
-fun DropDown(forecasts:List<MutableStateFlow<String>>, step: Int) {
+fun DropDown() {
 
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("kyiv", "vinnytsia", "sokyryany")
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.TopCenter).fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter) {
-        Text(items[selectedIndex],modifier = Modifier.width(200.dp).clickable(onClick = { expanded = true }).background(
-            Color.Gray),
+    Box (modifier = Modifier.wrapContentSize(Alignment.TopCenter)
+        .border(4.dp,Color.Blue,RoundedCornerShape(8.dp)),
+
+        ) {
+        Text(getCity(),modifier = Modifier.width(300.dp).clickable(onClick = { expanded = true }).background(
+            Color.White),
             textAlign = TextAlign.Center)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth().background(
+            modifier = Modifier.width(300.dp).background(
                 Color.White)
 
         ) {
@@ -49,7 +50,7 @@ fun DropDown(forecasts:List<MutableStateFlow<String>>, step: Int) {
                     selectedIndex = index
                     setCity(items[index])
                     weatherForecast = getWeather(getCity()+", ua")
-                    init(forecasts, step, 0)
+//                    init(forecasts, step, 0)
                 }) {
                     val disabledText = if (s == disabledValue) {
                         " (Disabled)"

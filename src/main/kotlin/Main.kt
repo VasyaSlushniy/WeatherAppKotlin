@@ -28,6 +28,8 @@ import navcontroller.NavigationHost
 import navcontroller.composable
 import navcontroller.rememberNavController
 import screens.*
+import java.io.File
+import java.sql.Connection
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,7 +39,8 @@ import kotlin.system.measureTimeMillis
 
 public var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
 
-private var city = "kyiv, ua"
+private var city:String = File(File("src/main/kotlin/userData").readText().substringAfter("/")).toString()
+private var internetConnection = true
 @Composable
 @Preview
 fun App() {
@@ -86,6 +89,7 @@ fun App() {
             }
         }
     }
+    if (!internetConnection) dialogNoInternetConnection()
     thread {
         var c = 0
         while (true) {
@@ -111,6 +115,7 @@ fun main() = application {
     )
 
     weatherForecast = getWeather(getCity()+", ua")
+
     Window(onCloseRequest = ::exitApplication, visible = true, state = state) {
         App()
 
@@ -185,5 +190,15 @@ fun getCity ():String {
 fun setCity (newCity:String){
     city = newCity
 }
+
+
+fun getInternetConnection ():Boolean {
+    return internetConnection
+}
+
+fun setInternetConnection (connection:Boolean){
+    internetConnection = connection
+}
+
 
 

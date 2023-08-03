@@ -39,7 +39,6 @@ fun HomeScreen(
         counter++
     }
     counter = 0
-    DropDown(forecasts,1)
 
 }
 

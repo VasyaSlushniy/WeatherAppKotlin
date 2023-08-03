@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import getCity
+import methods.DropDown
 import navcontroller.NavController
 import java.io.File
 
@@ -42,14 +44,9 @@ fun ProfileScreen(
             onValueChange = {nameText = it}
 
             )
-            Text("Місто", Modifier.padding(top = 5.dp))
-            TextField(
-                value = city,
-                onValueChange = {city = it}
+            DropDown()
 
-            )
-
-            Button(onClick = {saveToFile(nameText, city)}){
+            Button(onClick = {saveToFile(nameText, city)}, Modifier.padding(top = 24.dp)){
                 Text("Зберегти дані")
             }
 
@@ -59,7 +56,7 @@ fun ProfileScreen(
 }
 
 fun saveToFile (name: String, city: String){
-    File("src/main/kotlin/userData").writeText("$name/$city")
+    File("src/main/kotlin/userData").writeText("$name/${getCity()}")
 
 }
 
