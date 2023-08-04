@@ -1,7 +1,5 @@
 package screens
 
-import Gson.City
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
@@ -26,27 +23,29 @@ import java.io.File
 fun ProfileScreen(
     navController: NavController
 ) {
-    var data : String = readData()
+    val data : String = readData()
 
     var nameText by remember { mutableStateOf(  data.substringBefore("/")) }
-    var city by remember { mutableStateOf(data.substringAfter("/")) }
 
-    val shape = RectangleShape
-    Box(Modifier.padding(top = 50.dp, start = 100.dp, bottom = 100.dp,end = 50.dp).fillMaxSize().border(4.dp, Color.Blue, shape )) {
+    RectangleShape
+    Box(Modifier.padding(top = 50.dp, start = 100.dp, bottom = 100.dp,end = 50.dp).fillMaxSize()) {
 
-        Column (Modifier.fillMaxSize(),
+        Column (Modifier.fillMaxSize().padding(top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center){
-            Text("Профіль", Modifier.padding(top = 5.dp))
-            Text("Ім'я", Modifier.padding(top = 5.dp))
+            Text("Профіль", Modifier.padding(top = 16.dp))
+            Text("Ім'я", Modifier.padding(top = 16.dp, bottom = 4.dp))
             TextField(
                 value = nameText,
             onValueChange = {nameText = it}
 
             )
+
+            Text("Місто", Modifier.padding(top = 16.dp, bottom = 4.dp))
+
             DropDown()
 
-            Button(onClick = {saveToFile(nameText, city)}, Modifier.padding(top = 24.dp)){
+            Button(onClick = {saveToFile(nameText)}, Modifier.padding(top = 24.dp)){
                 Text("Зберегти дані")
             }
 
@@ -55,10 +54,10 @@ fun ProfileScreen(
 
 }
 
-fun saveToFile (name: String, city: String){
-    File("src/main/kotlin/userData").writeText("$name/${getCity()}")
+fun saveToFile (name: String){
+    File("src/main/kotlin/Data/userData").writeText("$name/${getCity()}")
 
 }
 
 fun readData()
-        = File("src/main/kotlin/userData").readText()
+        = File("src/main/kotlin/Data/userData").readText()

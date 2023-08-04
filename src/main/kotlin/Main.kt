@@ -1,6 +1,5 @@
-// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+
 import Gson.WeatherForecast
-import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,37 +8,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import methods.getWeather
 import navcontroller.NavController
 import navcontroller.NavigationHost
 import navcontroller.composable
 import navcontroller.rememberNavController
 import screens.*
 import java.io.File
-import java.sql.Connection
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.*
 import kotlin.concurrent.thread
-import kotlin.system.measureTimeMillis
 
-public var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
+private var weatherForecast: WeatherForecast = WeatherForecast(null,null,null,null,null)
 
-private var city:String = File(File("src/main/kotlin/userData").readText().substringAfter("/")).toString()
+private var city:String = File(File("src/main/kotlin/Data/userData").readText().substringAfter("/")).toString()
 private var internetConnection = true
 @Composable
 @Preview
@@ -95,7 +82,7 @@ fun App() {
         while (true) {
 
         Thread.sleep(60000)
-        getWeather(getCity()+", ua")
+        setWeatherForecast(getWeather(getCity()+", ua"))
         updateWeatherHome()
         updateWeatherFive()
         updateWeatherThree()
@@ -136,11 +123,11 @@ enum class Screen(
     ),
     ThreeDaysScreen(
         label = "Three days",
-        icon = Icons.Filled.Notifications
+        icon = Icons.Filled.DateRange
     ),
     FiveDaysScreen(
         label = "Five days",
-        icon = Icons.Filled.Settings
+        icon = Icons.Filled.DateRange
     ),
     ProfileScreens(
         label = "Profile",
@@ -174,7 +161,7 @@ fun CustomNavigationHost(
             ProfileScreen(navController)
         }
         composable(Screen.WeatherDetails.name){
-            WeatherDetails(navController, LocalDate.now())
+            WeatherDetails(navController)
         }
 
     }.build()
@@ -192,13 +179,19 @@ fun setCity (newCity:String){
 }
 
 
-fun getInternetConnection ():Boolean {
-    return internetConnection
-}
-
 fun setInternetConnection (connection:Boolean){
     internetConnection = connection
 }
+
+fun getWeatherForecast ():WeatherForecast{
+    return weatherForecast
+}
+
+fun setWeatherForecast (weather: WeatherForecast){
+    weatherForecast = weather
+}
+
+
 
 
 

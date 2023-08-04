@@ -1,4 +1,5 @@
-import Gson.WeatherForecast
+package methods
+
 import kotlinx.coroutines.flow.MutableStateFlow
 
 fun init (forecast: List<MutableStateFlow<String>>, step :Int, startIndex:Int){

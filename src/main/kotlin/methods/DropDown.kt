@@ -1,6 +1,5 @@
 package methods
 
-import Gson.WeatherForecast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,17 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import getCity
-import getWeather
-import init
-import kotlinx.coroutines.flow.MutableStateFlow
 import setCity
-import weatherForecast
+import setWeatherForecast
 
 @Composable
 fun DropDown() {
 
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("kyiv", "vinnytsia", "sokyryany")
+    val items = listOf("Kyiv", "Vinnytsia", "Khmelnytskyi","Odesa", "Lviv ")
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
 
@@ -35,7 +31,8 @@ fun DropDown() {
 
         ) {
         Text(getCity(),modifier = Modifier.width(300.dp).clickable(onClick = { expanded = true }).background(
-            Color.White),
+            Color.White).padding(top = 8.dp, bottom = 8.dp),
+
             textAlign = TextAlign.Center)
         DropdownMenu(
             expanded = expanded,
@@ -49,8 +46,8 @@ fun DropDown() {
                     expanded = false
                     selectedIndex = index
                     setCity(items[index])
-                    weatherForecast = getWeather(getCity()+", ua")
-//                    init(forecasts, step, 0)
+                    setWeatherForecast(getWeather(getCity()+", ua"))
+//                    methods.init(forecasts, step, 0)
                 }) {
                     val disabledText = if (s == disabledValue) {
                         " (Disabled)"

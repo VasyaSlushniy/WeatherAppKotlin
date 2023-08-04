@@ -1,34 +1,15 @@
 package screens
 
-import Gson.WeatherForecast
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.gson.Gson
-import getCity
-import getWeather
-import init
+import getWeatherForecast
+import methods.init
 import kotlinx.coroutines.flow.MutableStateFlow
 import methods.draw
 import navcontroller.NavController
-import weatherForecast
-import java.net.URL
 
 
 private var forecasts  = listOf(
@@ -45,6 +26,7 @@ fun ThreeDaysScreen(
 ) {
     init(forecasts, 8, 0)
 
+    Text("Погода на 3 дня", modifier = Modifier.padding(start = 325.dp, end = 300.dp).fillMaxWidth())
     counter = 0
     for (item in forecasts){
         draw(item, counter, 3,list, navController)
@@ -56,7 +38,7 @@ fun ThreeDaysScreen(
 }
 
 fun updateWeatherThree () {
-    weatherForecast = getWeather(getCity()+", ua")
+    weatherForecast = getWeatherForecast()
     var count = 0
     for (item in forecasts){
         item.value = "Температура: ${weatherForecast.list?.get(count)?.main?.temp}\n" +

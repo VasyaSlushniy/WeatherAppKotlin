@@ -1,7 +1,13 @@
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import methods.draw
+import methods.init
 import navcontroller.NavController
 import java.time.LocalDate
 
@@ -22,14 +28,15 @@ private var forecasts  = listOf(
 
 @Composable
 fun WeatherDetails (
-navController: NavController, date: LocalDate
+navController: NavController
 ) {
    var run = true
    var index = 0
    var bool : Boolean?
+   Text("Детальна погода обраного дня", modifier = Modifier.padding(start = 275.dp, end = 250.dp).fillMaxWidth())
    if (detailDate== null || detailDate.equals("")) setDay(LocalDate.now().toString())
    while (run){
-      bool = weatherForecast.list?.get(index)?.dtTxt?.substringBefore(" ")?.equals(getDay())
+      bool = getWeatherForecast().list?.get(index)?.dtTxt?.substringBefore(" ")?.equals(getDay())
 
       if (bool!!){
          run = false

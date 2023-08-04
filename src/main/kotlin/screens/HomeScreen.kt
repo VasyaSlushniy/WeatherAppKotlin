@@ -1,16 +1,19 @@
 package screens
 
 import Gson.WeatherForecast
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import getCity
-import getWeather
-import init
+import getWeatherForecast
+import methods.getWeather
+import methods.init
 import kotlinx.coroutines.flow.MutableStateFlow
-import methods.DropDown
 import methods.draw
 import navcontroller.NavController
-import navcontroller.rememberNavController
-import setText
 
 
 var weatherForecast:WeatherForecast = WeatherForecast(null, null, null, null, null)
@@ -26,6 +29,8 @@ private var forecasts  = listOf(MutableStateFlow("0"),
 
 private var counter = 0
 private var list = mutableListOf(0,0)
+
+
 @Composable
 fun HomeScreen(
     navController: NavController
@@ -33,6 +38,8 @@ fun HomeScreen(
      weatherForecast = getWeather(getCity()+", ua")
     init(forecasts,1, 0)
 
+
+    Text("Погода на 24 години", modifier = Modifier.padding(start = 325.dp, end = 300.dp).fillMaxWidth())
 
     for (item in forecasts){
         draw(item, counter, 9 , list, navController)
@@ -43,7 +50,7 @@ fun HomeScreen(
 }
 
 fun updateWeatherHome () {
-   weatherForecast = getWeather(getCity()+", ua")
+   weatherForecast = getWeatherForecast()
     var count = 0
     for (item in forecasts){
         item.value = "Температура: ${weatherForecast.list?.get(count)?.main?.temp}\n" +
