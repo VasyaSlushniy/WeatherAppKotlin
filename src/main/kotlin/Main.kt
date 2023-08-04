@@ -118,19 +118,19 @@ enum class Screen(
     val icon: ImageVector
 ) {
     HomeScreen(
-        label = "Home",
+        label = "Головна",
         icon = Icons.Filled.Home
     ),
     ThreeDaysScreen(
-        label = "Three days",
+        label = "3 дні",
         icon = Icons.Filled.DateRange
     ),
     FiveDaysScreen(
-        label = "Five days",
+        label = "5 днів",
         icon = Icons.Filled.DateRange
     ),
     ProfileScreens(
-        label = "Profile",
+        label = "Профіль",
         icon = Icons.Filled.AccountBox
     ),
     WeatherDetails(

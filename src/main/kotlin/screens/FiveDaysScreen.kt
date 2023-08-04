@@ -1,11 +1,12 @@
 package screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import getCity
 import getWeatherForecast
 import methods.init
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,11 @@ private var list = mutableListOf(0,0)
 fun FiveDaysScreen(
     navController: NavController
 ) {
-    Text("Погода на 5 днів", modifier = Modifier.padding(start = 325.dp, end = 300.dp).fillMaxWidth())
+    Row (modifier = Modifier.fillMaxWidth(),
+
+        horizontalArrangement = Arrangement.Center) {
+        Text("Погода на 5 днів місті \"${getCity()}\"")
+    }
 
     init(forecasts, 8, 0)
 

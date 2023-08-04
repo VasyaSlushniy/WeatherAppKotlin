@@ -1,12 +1,10 @@
 package screens
 
 import Gson.WeatherForecast
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import getCity
 import getWeatherForecast
 import methods.getWeather
@@ -39,7 +37,11 @@ fun HomeScreen(
     init(forecasts,1, 0)
 
 
-    Text("Погода на 24 години", modifier = Modifier.padding(start = 325.dp, end = 300.dp).fillMaxWidth())
+    Row (modifier = Modifier.fillMaxWidth(),
+
+    horizontalArrangement = Arrangement.Center) {
+        Text("Погода на 24 години в місті \"${getCity()}\"")
+    }
 
     for (item in forecasts){
         draw(item, counter, 9 , list, navController)
