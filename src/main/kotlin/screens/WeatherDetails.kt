@@ -43,6 +43,7 @@ navController: NavController
       } else index++
    }
 
+   if (index >= 32 ) index = 31
    init(forecasts,1, index)
 
 
